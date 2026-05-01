@@ -16,10 +16,10 @@ export async function handleUserInput(text: string) {
   const intent = classifyIntent(preprocessed);
 
   if (intent === "transport") {
-    const transportMessage = await getTransportInfo();
+    const reply = await getTransportInfo();
     return {
       intent,
-      reply: transportMessage,
+      reply,
       preprocessed,
     };
   }
