@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BUS_ARRIVAL_API_URL = "http://apis.data.go.kr/6410000/busarrivalservice/getBusArrivalListv2";
+const BUS_ARRIVAL_API_URL = "https://apis.data.go.kr/6410000/busarrivalservice/getBusArrivalListv2";
 const SERVICE_KEY = "YOUR_API_KEY";
 const STATION_ID = "YOUR_STATION_ID";
 
@@ -14,10 +14,14 @@ export async function getTransportInfo(): Promise<string> {
       },
     });
 
-    console.log(res.data);
+    console.log(JSON.stringify(res.data, null, 2));
 
     const items = res?.data?.response?.body?.items;
     const list = Array.isArray(items) ? items : items ? [items] : [];
+
+    if (list.length === 0) {
+      return "버스 정보 없음";
+    }
 
     const bus611 = list.find((item: any) => {
       const routeName = String(item?.routeName ?? "");
@@ -25,7 +29,7 @@ export async function getTransportInfo(): Promise<string> {
     });
 
     if (!bus611) {
-      return "버스 정보 없음";
+      return "611번 버스 없음";
     }
 
     const routeName = String(bus611.routeName ?? "611");
